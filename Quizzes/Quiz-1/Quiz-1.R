@@ -45,16 +45,16 @@ gpa <- c(
  3.2,
  3.3,
  3.1,
+ 3.1,
+ 3.1,
+ 3.1,
+ 3.1,
+ 3.1,
  3.6,
- 3.7,
- 3.8,
- 3.9,
- 3.4,
- 3.5,
  2.3
 )
 
 students.data <- data.frame(fname, lname, zipcode, gpa)
 
-students.data$fname
-
+students.data[students.data$gpa >= 3.2,]
+students.data[students.data$zipcode == 75093,]
