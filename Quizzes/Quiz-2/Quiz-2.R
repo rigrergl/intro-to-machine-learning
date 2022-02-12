@@ -1,3 +1,7 @@
+# Name: Rigre Garciandia
+# NetID: RRG190004
+# CS 4375.002
+
 #install.packages('ggplot2')  # use once 
 #install.packages('sampling')  # use once 
 #install.packages('scatterplot3d')  # use once 
