@@ -16,6 +16,20 @@ summary(clean.hepatitis)
 #Display the distribution of attributes (at least 5 attributes)
 hist(clean.hepatitis$bilirubin)
 boxplot(clean.hepatitis$age, data = clean.hepatitis, horizontal = TRUE, main = "Age Distribution")
-ggplot(clean.hepatitis, aes(x = age, y = sgot ,color = sex)) + geom_point()
+ggplot(clean.hepatitis, aes(x = age, y = sgot, color = sex)) + geom_point()
 ggplot(clean.hepatitis, aes(sex)) + geom_histogram(stat="count")
 ggplot(clean.hepatitis, aes(class)) + geom_histogram(stat="count")
+
+#show the relationship between  a continuous attribute and a discrete attribute (draw at least 4 plots)
+ggplot(clean.hepatitis, aes(x = age, y = fatigue, color = class)) + geom_point()
+ggplot(clean.hepatitis, aes(x = steroid, y = bilirubin)) + stat_summary(fun.data = mean_sdl, geom = "bar")
+ggplot(clean.hepatitis, aes(x = sex, y = bilirubin)) + stat_summary(fun.data = mean_sdl, geom = "bar")
+ggplot(clean.hepatitis, aes(x = anorexia, y = sgot)) + stat_summary(fun.data = mean_sdl, geom = "bar")
+
+#Extract continuous features and sex feature from the improved dataset. 
+#Compute the averages for them, grouped (aggregated) according to sex. Report your
+#findings (at least 3 lines)
+cols <- c("age", "bilirubin", "alk_phosphate", "sgot", "albumin", "protime")
+sex.averages <- aggregate(clean.hepatitis[,cols], by=list(clean.hepatitis$sex), FUN=mean, na.rm = TRUE)
+
+
