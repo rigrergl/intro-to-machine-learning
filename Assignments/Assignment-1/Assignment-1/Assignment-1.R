@@ -45,7 +45,7 @@ hist(distances)
 #4
 sampleids <- sample(1:nrow(clean.hepatitis), 500, replace = TRUE)
 sampleids.duplicated <- unique(sampleids[duplicated(sampleids)])
-length(sampleids.duplicated)
-nrow(clean.hepatitis)
+length(sampleids.duplicated)# duplicates in random sample
+nrow(clean.hepatitis) # duplicates in original dataset
 
      
