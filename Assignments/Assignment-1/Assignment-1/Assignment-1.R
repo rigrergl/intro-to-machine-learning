@@ -26,10 +26,18 @@ ggplot(clean.hepatitis, aes(x = steroid, y = bilirubin)) + stat_summary(fun.data
 ggplot(clean.hepatitis, aes(x = sex, y = bilirubin)) + stat_summary(fun.data = mean_sdl, geom = "bar")
 ggplot(clean.hepatitis, aes(x = anorexia, y = sgot)) + stat_summary(fun.data = mean_sdl, geom = "bar")
 
+
+#2
 #Extract continuous features and sex feature from the improved dataset. 
 #Compute the averages for them, grouped (aggregated) according to sex. Report your
 #findings (at least 3 lines)
-cols <- c("age", "bilirubin", "alk_phosphate", "sgot", "albumin", "protime")
-sex.averages <- aggregate(clean.hepatitis[,cols], by=list(clean.hepatitis$sex), FUN=mean, na.rm = TRUE)
+continuous.cols <- c("age", "bilirubin", "alk_phosphate", "sgot", "albumin", "protime")
+hepatitis.continuous = clean.hepatitis[,continuous.cols]
+sex.averages <- aggregate(hepatitis.continuous, by=list(clean.hepatitis$sex), FUN=mean, na.rm = TRUE)
 
-
+#3
+hepatitis.scaled <- scale(hepatitis.continuous)
+summary(hepatitis.scaled)
+distances <- dist(hepatitis.scaled[1:10,], method="euclidean")
+summary(distances)
+hist(distances)
