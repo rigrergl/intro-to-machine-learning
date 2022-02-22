@@ -41,3 +41,11 @@ summary(hepatitis.scaled)
 distances <- dist(hepatitis.scaled[1:10,], method="euclidean")
 summary(distances)
 hist(distances)
+
+#4
+sampleids <- sample(1:nrow(clean.hepatitis), 500, replace = TRUE)
+sampleids.duplicated <- unique(sampleids[duplicated(sampleids)])
+length(sampleids.duplicated)
+nrow(clean.hepatitis)
+
+     
