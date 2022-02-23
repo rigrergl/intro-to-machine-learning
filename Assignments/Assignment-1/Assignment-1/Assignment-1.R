@@ -1,6 +1,8 @@
 #install.packages('ggplot2')  # use once 
+#install.packages('arules')  # use once 
 
 library(ggplot2)
+library(arules)
 
 hepatitis <- read.table("hepatitis_csv.csv", sep=",", header=TRUE, na.strings=c("", "NA"))
 hepatitis
@@ -48,4 +50,10 @@ sampleids.duplicated <- unique(sampleids[duplicated(sampleids)])
 length(sampleids.duplicated)# duplicates in random sample
 nrow(clean.hepatitis) # duplicates in original dataset
 
+#6
+age.discrete.interval <- discretize(clean.hepatitis$age, method="interval", breaks = 4)
+summary(age.discrete.interval)
+
+age.discrete.frequency <- discretize(clean.hepatitis$age, method="frequency", breaks = 4)
+summary(age.discrete.frequency)
      
