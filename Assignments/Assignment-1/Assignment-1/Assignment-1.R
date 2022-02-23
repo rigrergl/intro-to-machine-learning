@@ -56,4 +56,12 @@ summary(age.discrete.interval)
 
 age.discrete.frequency <- discretize(clean.hepatitis$age, method="frequency", breaks = 4)
 summary(age.discrete.frequency)
+
+#7
+sample <- clean.hepatitis[, c("age", "alk_phosphate")]
+
+sampleids <- sample(1:nrow(sample), 50, replace = FALSE)
+sample <- sample[sampleids,]
+
+cor(sample)
      
