@@ -1,10 +1,12 @@
-#install.packages('ggplot2')  # use once 
-#install.packages('arules')  # use once 
-#install.packages('scatterplot3d') # use once
+#install.packages('ggplot2')
+#install.packages('arules') 
+#install.packages('scatterplot3d') 
+#install.packages('lsa') 
 
 library(ggplot2)
 library(arules)
 library(scatterplot3d)
+library(lsa)
 
 hepatitis <- read.table("hepatitis_csv.csv", sep=",", header=TRUE, na.strings=c("", "NA"))
 hepatitis
@@ -78,5 +80,10 @@ cor(sample)
 x <- c(1, 1, 0, 0)
 y <- c(1, 1, 0, 0)
 
-dist(rbind(x, y), method = "euclidian")
-dist(rbind(x, y), method = "euclidian")
+df <- data.frame(x,y)
+
+cosine(rbind(x, y)) # cosine similarity
+cor(df) # correlation
+dist(rbind(x, y), method = "euclidean") # Euclidean distance
+dist(rbind(x, y), method = "binary") # Jaccard distance
+
