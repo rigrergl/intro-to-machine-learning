@@ -1,8 +1,10 @@
 #install.packages('ggplot2')  # use once 
 #install.packages('arules')  # use once 
+#install.packages('scatterplot3d') # use once
 
 library(ggplot2)
 library(arules)
+library(scatterplot3d)
 
 hepatitis <- read.table("hepatitis_csv.csv", sep=",", header=TRUE, na.strings=c("", "NA"))
 hepatitis
@@ -50,6 +52,13 @@ sampleids.duplicated <- unique(sampleids[duplicated(sampleids)])
 length(sampleids.duplicated)# duplicates in random sample
 nrow(clean.hepatitis) # duplicates in original dataset
 
+#5 - pick the principal components that have the highest variation
+extracted.features <- clean.hepatitis[, c("protime", "albumin", "sgot")]
+scatterplot3d(extracted.features)
+
+prin_comp <- prcomp(extracted.features, scale. = TRUE)
+summary(prin_comp)
+
 #6
 age.discrete.interval <- discretize(clean.hepatitis$age, method="interval", breaks = 4)
 summary(age.discrete.interval)
@@ -64,4 +73,10 @@ sampleids <- sample(1:nrow(sample), 50, replace = FALSE)
 sample <- sample[sampleids,]
 
 cor(sample)
-     
+
+#8 
+x <- c(1, 1, 0, 0)
+y <- c(1, 1, 0, 0)
+
+dist(rbind(x, y), method = "euclidian")
+dist(rbind(x, y), method = "euclidian")
