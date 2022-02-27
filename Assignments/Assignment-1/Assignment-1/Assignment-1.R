@@ -1,3 +1,7 @@
+#Rigre Garciandia
+#RRG190004
+#CS 4375.002
+
 #install.packages('ggplot2')
 #install.packages('arules') 
 #install.packages('scatterplot3d') 
