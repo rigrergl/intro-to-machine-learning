@@ -61,6 +61,10 @@ scatterplot3d(extracted.features)
 prin_comp <- prcomp(extracted.features, scale. = TRUE)
 summary(prin_comp)
 
+#How important is each principal component
+plot(prin_comp)
+plot(prin_comp$x)
+
 #6
 age.discrete.interval <- discretize(clean.hepatitis$age, method="interval", breaks = 4)
 summary(age.discrete.interval)
