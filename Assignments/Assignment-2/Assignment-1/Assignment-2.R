@@ -189,11 +189,6 @@ mean(accs)
 
 ########################### Part 8 ########################### 
 
-simple_roc <- function(labels, scores){
-  labels <- labels[order(scores, decreasing=TRUE)]
-  data.frame(TPR=cumsum(labels)/sum(labels), FPR=cumsum(!labels)/sum(!labels), labels)
-}
-
 true_class <- c(TRUE, TRUE, FALSE, FALSE, TRUE, TRUE, FALSE, FALSE, TRUE, FALSE)
 m1 <- c(.73, 
         .69,
@@ -218,8 +213,6 @@ m2 <- c(.61,
         .01,
         .04
         )
-
-roc_data <- simple_roc(labels, scores)
 
 par(mfrow=c(2,2))
 plot(roc(true_class, m1, direction="<"),
