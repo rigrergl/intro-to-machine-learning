@@ -25,6 +25,10 @@ accuracy <- function(truth, prediction) {
   sum(diag(tbl))/sum(tbl)
 }
 
+error <- function(truth, prediction) {
+  1 - accuracy(truth, prediction)
+}
+
 #Create a decision tree with default settings
 tree_default <- rpart(class ~ ., data = clean.hepatitis)
 tree_default
@@ -119,7 +123,7 @@ gen_error_optimistic_full
 gen_error_pessimistic_full <- (wrong_pred_count_full + nrow(clean.hepatitis) * 0.5) / nrow(clean.hepatitis)
 gen_error_pessimistic_full
 
-########################### Part 3 ######################################################
+########################### Part 3 ########################### 
 #Construct a decision tree for the improved “Hepatitis” data set to illustrate under-fitting. 
 
 tree_under_fitted <- rpart(class ~., data = clean.hepatitis, control = rpart.control(minsplit = 2, cp = .4))
@@ -127,3 +131,40 @@ rpart.plot(tree_under_fitted, extra = 2, under = TRUE,  varlen=0, faclen=0)
 
 pred_under_fitted <- predict(tree_under_fitted, clean.hepatitis, type = "class")
 accuracy(clean.hepatitis$class, pred_under_fitted)
+
+########################### Part 4 ########################### 
+#Create a tree with 2/3 training 1/3 testing
+n_train <- as.integer(nrow(clean.hepatitis) * .66)
+n_train
+
+#Randomly choose the rows 
+train_id <- sample(1:nrow(clean.hepatitis), n_train)
+
+train <- clean.hepatitis[train_id,]
+test <- clean.hepatitis[-train_id, colnames(clean.hepatitis) != "class"]
+test_class <- clean.hepatitis[-train_id, "class"]
+
+tree_1 <- rpart(class ~ ., data = train, control = rpart.control((minsplit = 2)))
+rpart.plot(tree_1, extra = 2, under = TRUE,  varlen=0, faclen=0)
+
+training_error_1 <- error(train$class, predict(tree_1, train, type = "class"))
+training_error_1
+
+test_error_1 <- error(test_class, predict(tree_1, test, type = "class"))
+test_error_1
+
+#Then, randomly select 15 objects of the improved “Hepatitis” data set as the training dataset and consider the remaining objects as the test dataset
+train_id_2 <- sample(1:nrow(clean.hepatitis), 15)
+
+train_2 <- clean.hepatitis[train_id_2,]
+test_2 <- clean.hepatitis[-train_id_2, colnames(clean.hepatitis) != "class"]
+test_class_2 <- clean.hepatitis[-train_id_2, "class"]
+
+tree_2 <- rpart(class ~., data = train_2, control = rpart.control(minsplit = 2))
+rpart.plot(tree_2, extra = 2, under = TRUE,  varlen=0, faclen=0)
+
+training_error_2 <- error(train_2$class, predict(tree_2, train_2, type = "class"))
+training_error_2
+
+test_error_2 <- error(test_class_2, predict(tree_2, test_2, type = "class"))
+test_error_2
