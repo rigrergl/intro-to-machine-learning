@@ -2,6 +2,7 @@
 
 library(rpart)
 library(rpart.plot)
+library(pROC)
 
 #Import dataset
 hepatitis <- read.table("hepatitis_csv.csv", sep=",", header=TRUE, na.strings=c("", "NA"))
@@ -185,3 +186,43 @@ for (i in 1:length(folds)) {
 }
 accs
 mean(accs)
+
+########################### Part 8 ########################### 
+
+simple_roc <- function(labels, scores){
+  labels <- labels[order(scores, decreasing=TRUE)]
+  data.frame(TPR=cumsum(labels)/sum(labels), FPR=cumsum(!labels)/sum(!labels), labels)
+}
+
+true_class <- c(TRUE, TRUE, FALSE, FALSE, TRUE, TRUE, FALSE, FALSE, TRUE, FALSE)
+m1 <- c(.73, 
+        .69,
+        .44,
+        .55,
+        .67,
+        .47,
+        .08,
+        .15,
+        .45,
+        .35
+        )
+
+m2 <- c(.61,
+        .03,
+        .68,
+        .31,
+        .45,
+        .09,
+        .38,
+        .05,
+        .01,
+        .04
+        )
+
+roc_data <- simple_roc(labels, scores)
+
+par(mfrow=c(2,2))
+plot(roc(true_class, m1, direction="<"),
+     col="blue", lwd=3, main="M1", print.auc=TRUE)
+plot(roc(true_class, m2, direction="<"),
+     col="red", lwd=3, main="M2",print.auc=TRUE)
