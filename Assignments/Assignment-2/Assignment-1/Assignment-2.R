@@ -168,3 +168,20 @@ training_error_2
 
 test_error_2 <- error(test_class_2, predict(tree_2, test_2, type = "class"))
 test_error_2
+
+########################### Part 5 ########################### 
+index <- 1:nrow(clean.hepatitis)
+index <-sample(index) #shuffle index
+
+fold <- rep(1:10, each = nrow(clean.hepatitis)/10)[1:nrow(clean.hepatitis)]
+fold
+
+folds <- split(index, fold)
+
+accs <- vector(mode = "numeric")
+for (i in 1:length(folds)) {
+  tree <- rpart(class ~., data=clean.hepatitis[-folds[[i]],], control=rpart.control(minsplit=2))
+  accs[i] <- accuracy(clean.hepatitis[folds[[i]],]$class, predict(tree, clean.hepatitis[folds[[i]],], type="class"))
+}
+accs
+mean(accs)
