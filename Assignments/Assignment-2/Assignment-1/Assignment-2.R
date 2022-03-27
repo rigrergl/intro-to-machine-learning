@@ -118,3 +118,12 @@ gen_error_optimistic_full
 
 gen_error_pessimistic_full <- (wrong_pred_count_full + nrow(clean.hepatitis) * 0.5) / nrow(clean.hepatitis)
 gen_error_pessimistic_full
+
+########################### Part 3 ######################################################
+#Construct a decision tree for the improved “Hepatitis” data set to illustrate under-fitting. 
+
+tree_under_fitted <- rpart(class ~., data = clean.hepatitis, control = rpart.control(minsplit = 2, cp = .4))
+rpart.plot(tree_under_fitted, extra = 2, under = TRUE,  varlen=0, faclen=0)
+
+pred_under_fitted <- predict(tree_under_fitted, clean.hepatitis, type = "class")
+accuracy(clean.hepatitis$class, pred_under_fitted)
