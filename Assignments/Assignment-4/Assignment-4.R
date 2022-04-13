@@ -1,60 +1,56 @@
-#install.packages('mlbench')
-#install.packages('rpart')
-#install.packages('rpart.plot')
-#install.packages('caret')
-#install.packages('lattice')
-#install.packages('e1071')
-#install.packages('doParallel')
-#install.packages('foreach')
-#install.packages('iterators')
-#install.packages('parallel')
+#install.packages('boot', dep=TRUE)
 
-library(mlbench)
+library(boot)
 library(rpart)
-library(rpart.plot)
-library(ggplot2)
-library(lattice)
-library(e1071)
-library(caret)
-library(parallel)
-library(iterators)
-library(foreach)
-library(doParallel)
 
-#4
-#Repeated Bootstrap Sampling
-#An alternative to CV is repeated bootstrap sampling. It will give you very similar estimates.
+#####################Question 6#################################
+#Function for accuracy
+accuracy <- function(truth, prediction) {
+  tbl <- table(truth, prediction)
+  sum(diag(tbl))/sum(tbl)
+}
 
-person_id <- 1:10
-home_owner <- c (TRUE, 
-                 FALSE,
-                 TRUE,
-                 FALSE,
-                 TRUE,
-                 FALSE,
-                 FALSE,
-                 FALSE,
-                 FALSE,
-                 TRUE)
+#Import dataset
+hepatitis <- read.table("hepatitis_csv.csv", sep=",", header=TRUE, na.strings=c("", "NA"))
+hepatitis
 
-refund <- c(TRUE,
-            TRUE,
-            FALSE,
-            FALSE,
-            TRUE,
-            TRUE,
-            FALSE,
-            TRUE,
-            TRUE,
-            FALSE)
+#Clean dataset (remove duplicates and missing values)
+duplicates <- duplicated(hepatitis)
+duplicates # there are no duplicates
 
-df <- data.frame(person_id, home_owner, refund)
+clean.hepatitis <- hepatitis[complete.cases(hepatitis),]
+summary(clean.hepatitis)
 
-for(i in c(2:3))
-  df[[i]] <- as.factor(df[[i]])
+#Translate all the TRUE/FALSE values into factors (nominal)
+for (i in c(3:13, 19:20)) {
+  clean.hepatitis[[i]] <- as.factor(clean.hepatitis[[i]])
+}
 
-fit <- train(refund ~ ., data = df, method = "rpart",
-             control=rpart.control(minsplit=2),
-             trControl = trainControl(method = "boot", number = 10),
-             tuneLength=5)
-fit
+#create folds
+index <- 1:nrow(clean.hepatitis)
+index <- sample(index) #shuffle index
+
+fold <- rep(1:10, each=nrow(clean.hepatitis)/10)[1:nrow(clean.hepatitis)]
+fold
+
+folds <- split(index, fold) ## create list with indices for each fold
+folds
+
+#Do each fold
+cps = c(0.003197442, 0.006705747, 0.036903810, 0.064481748, 0.128497202)
+cp_accs <- vector(mode="numeric")
+cp_errors <- vector(mode="numeric")
+
+for(i_cp in 1:length(cps)) {
+  accs <- vector(mode="numeric")
+  for(i in 1:length(folds)){
+    tree <- rpart(class~ ., data=clean.hepatitis[-folds[[i]],], control=rpart.control(minsplit=2, cp=cps[i_cp]))
+    accs[i] <- accuracy(clean.hepatitis[folds[[i]],]$class, predict(tree, clean.hepatitis[folds[[i]],], type="class"))
+  }
+  
+  cp_accs[i_cp] = mean(accs)
+  cp_errors[i_cp] = 1 - cp_accs[i_cp]
+}
+
+cp_accs
+cp_errors
