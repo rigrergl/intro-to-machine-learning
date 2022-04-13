@@ -1,9 +1,9 @@
-#install.packages('boot', dep=TRUE)
+#install.packages('rpart')
+#install.packages('caret')
 
-library(boot)
+library(caret)
 library(rpart)
 
-#####################Question 6#################################
 #Function for accuracy
 accuracy <- function(truth, prediction) {
   tbl <- table(truth, prediction)
@@ -26,6 +26,7 @@ for (i in c(3:13, 19:20)) {
   clean.hepatitis[[i]] <- as.factor(clean.hepatitis[[i]])
 }
 
+#####################Question 6#################################
 #create folds
 index <- 1:nrow(clean.hepatitis)
 index <- sample(index) #shuffle index
@@ -54,3 +55,18 @@ for(i_cp in 1:length(cps)) {
 
 cp_accs
 cp_errors
+
+#####################Question 7#################################
+library(caret)
+fit <- train(class ~ ., data = clean.hepatitis, method = "rpart",
+             control=rpart.control(minsplit=2),
+             trControl = trainControl(method = "cv", number = 10),
+             tuneLength=5)
+
+fit
+
+varImp(fit, compete = FALSE)
+dotPlot(varImp(fit, compete=FALSE))
+
+varImp(fit, compete = TRUE)
+dotPlot(varImp(fit, compete=TRUE))
