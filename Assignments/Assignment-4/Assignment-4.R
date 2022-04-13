@@ -73,7 +73,15 @@ dotPlot(varImp(fit, compete=TRUE))
 
 #####################Question 8#################################
 #Most important attributes: protime, histology, and albumin
-hep.subset <- clean.hepatitis[, 17:19]
+hep.scaled <- clean.hepatitis[, 17:20]
 
 # Standardize data (Z-score)
-hep.subset[,1:2] <- scale(hep.subset[,1:2])
+hep.scaled[,1:2] <- scale(hep.scaled[,1:2])
+
+#####################Question 9#################################
+knnFit <- train(class ~ ., method = "knn", data = hep.scaled,
+                tuneLength = 5, tuneGrid=data.frame(k=1:10),
+                trControl=trainControl(
+                  method = "cv"))
+knnFit
+plot(knnFit)
