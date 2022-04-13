@@ -70,3 +70,10 @@ dotPlot(varImp(fit, compete=FALSE))
 
 varImp(fit, compete = TRUE)
 dotPlot(varImp(fit, compete=TRUE))
+
+#####################Question 8#################################
+#Most important attributes: protime, histology, and albumin
+hep.subset <- clean.hepatitis[, 17:19]
+
+# Standardize data (Z-score)
+hep.subset[,1:2] <- scale(hep.subset[,1:2])
