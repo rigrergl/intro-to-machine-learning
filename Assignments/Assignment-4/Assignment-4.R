@@ -4,6 +4,24 @@
 library(caret)
 library(rpart)
 
+#####################Question 4#################################
+person.id <- 1:10
+
+
+df <- data.frame(person.id, home.owner, refund)
+for (i in c(2:3)) {
+  df[[i]] <- as.factor(df[[i]])
+}
+
+#create 10 bootstrap samples
+for(s in 1:10){
+  i <- 1:nrow(df)
+  i <- sample(i, replace = TRUE) #shuffle index
+  print(i)
+}
+
+#####################Hepatitis Data Setup#################################
+
 #Function for accuracy
 accuracy <- function(truth, prediction) {
   tbl <- table(truth, prediction)
